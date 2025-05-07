@@ -1,0 +1,369 @@
+
+1. Análise do faturamento
+faturamento_loja = (loja['Preço'] + loja['Frete']).sum()
+faturamento_loja2 = (loja2['Preço'] + loja2['Frete']).sum()
+faturamento_loja3 = (loja3['Preço'] + loja3['Frete']).sum()
+faturamento_loja4 = (loja4['Preço'] + loja4['Frete']).sum()
+
+#faturamento_loja
+print(f"{faturamento_loja:.2f}") 
+print(f"{faturamento_loja2:.2f}") 
+print(f"{faturamento_loja3:.2f}") 
+print(f"{faturamento_loja4:.2f}")
+
+
+2. Vendas por Categoria
+import pandas as pd
+
+cat_loja =  loja.groupby('Categoria do Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+cat_loja2 =  loja2.groupby('Categoria do Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+cat_loja3 =  loja3.groupby('Categoria do Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+cat_loja4 =  loja4.groupby('Categoria do Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)
+
+'''
+count_colunas = cat_loja.count()
+print(count_colunas)
+'''
+#categorias
+print ('Loja')
+print (cat_loja)
+print ()
+print ('Loja 2')
+print (cat_loja2)
+print ()
+print ('Loja 3')
+print (cat_loja3)
+print ()
+print ('Loja 4')
+print (cat_loja4)
+
+3. Média de Avaliação das Lojas
+
+print(f"Avaliação Loja {loja['Avaliação da compra'].mean():.2f}")
+print(f"Avaliação Loja 2 {loja2['Avaliação da compra'].mean():.2f}")
+print(f"Avaliação Loja 3 {loja3['Avaliação da compra'].mean():.2f}")
+print(f"Avaliação Loja 4 {loja4['Avaliação da compra'].mean():.2f}")
+
+4. Produtos Mais e Menos Vendidos
+print("Loja")
+print(loja.groupby('Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False))
+
+print()
+
+print("Loja 2")
+print(loja2.groupby('Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False))
+
+print()
+
+print("Loja 3")
+print(loja3.groupby('Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)) 
+
+print()
+
+print("Loja 4")
+print(loja4.groupby('Produto').size().reset_index(name='Quantidade').sort_values(by='Quantidade', ascending=False)) 
+
+5. Frete Médio por Loja
+print(f"Frete Loja {loja['Frete'].mean():.2f}")
+print(f"Frete Loja 2 {loja2['Frete'].mean():.2f}")
+print(f"Frete Loja 3 {loja3['Frete'].mean():.2f}")
+print(f"Frete Loja 4 {loja4['Frete'].mean():.2f}") 
+
+
+6. DATA ANALYSIS
+import matplotlib.pyplot as plt
+
+x = ['loja', 'loja2', 'loja3', 'loja4']
+y = [faturamento_loja, faturamento_loja2, faturamento_loja3, faturamento_loja4]
+
+plt.bar(x, y, color='#819fb8')
+plt.title('Faturamento por Loja')
+plt.xlabel('Loja')
+plt.ylabel('Faturamento')
+plt.show()
+
+-----
+
+prod_loja.rename(columns={'Quantidade': 'Quantidade_Loja1'}, inplace=True)
+prod_loja2.rename(columns={'Quantidade': 'Quantidade_Loja2'}, inplace=True)
+prod_loja3.rename(columns={'Quantidade': 'Quantidade_Loja3'}, inplace=True)
+prod_loja4.rename(columns={'Quantidade': 'Quantidade_Loja4'}, inplace=True)
+
+merge1 = pd.merge(prod_loja, prod_loja2, on='Produto', how='outer')
+merge2 = pd.merge(merge1, prod_loja3, on='Produto', how='outer')
+prod_merged = pd.merge(merge2, prod_loja4, on='Produto', how='outer')
+
+prod_merged.fillna(0, inplace=True)
+
+# Organiza o total por quantidade (melhor visualização dos gráficos)
+prod_merged['Total'] = prod_merged['Quantidade_Loja1'] + prod_merged['Quantidade_Loja2'] + prod_merged['Quantidade_Loja3'] + prod_merged['Quantidade_Loja4']
+prod_merged = prod_merged.sort_values(by='Total', ascending=False)
+
+
+plt.figure(figsize=(15, 6))
+plt.plot(prod_merged['Produto'], prod_merged['Quantidade_Loja1'], marker='o', label='Loja 1')
+plt.plot(prod_merged['Produto'], prod_merged['Quantidade_Loja2'], marker='o', label='Loja 2')
+plt.plot(prod_merged['Produto'], prod_merged['Quantidade_Loja3'], marker='o', label='Loja 3')
+plt.plot(prod_merged['Produto'], prod_merged['Quantidade_Loja4'], marker='o', label='Loja 4')
+
+plt.title('Quantidade de Produtos Vendidos por Loja')
+plt.xlabel('Produto')
+plt.ylabel('Quantidade')
+plt.xticks(rotation=90)
+plt.grid(True)
+plt.legend(title='Loja')
+plt.tight_layout()
+plt.show()
+
+-------
+
+import matplotlib.pyplot as plt
+loja['Data da Compra'] = pd.to_datetime(loja['Data da Compra'], dayfirst=True)
+loja2['Data da Compra'] = pd.to_datetime(loja2['Data da Compra'], dayfirst=True)
+loja3['Data da Compra'] = pd.to_datetime(loja3['Data da Compra'], dayfirst=True)
+loja4['Data da Compra'] = pd.to_datetime(loja4['Data da Compra'], dayfirst=True)
+
+loja['Total'] = loja['Preço'] + loja['Frete']
+loja2['Total'] = loja2['Preço'] + loja2['Frete']
+loja3['Total'] = loja3['Preço'] + loja3['Frete']
+loja4['Total'] = loja4['Preço'] + loja4['Frete']
+
+
+loja['Ano'] = loja['Data da Compra'].dt.year
+loja2['Ano'] = loja2['Data da Compra'].dt.year
+loja3['Ano'] = loja3['Data da Compra'].dt.year
+loja4['Ano'] = loja4['Data da Compra'].dt.year
+
+# Group and sum
+data_loja = loja.groupby('Ano')['Total'].sum().reset_index(name='Total_Loja1')
+data_loja2 = loja2.groupby('Ano')['Total'].sum().reset_index(name='Total_Loja2')
+data_loja3 = loja3.groupby('Ano')['Total'].sum().reset_index(name='Total_Loja3')
+data_loja4 = loja4.groupby('Ano')['Total'].sum().reset_index(name='Total_Loja4')
+
+merge1 = pd.merge(data_loja, data_loja2, on='Ano', how='outer')
+merge2 = pd.merge(merge1, data_loja3, on='Ano', how='outer')
+prod_merged = pd.merge(merge2, data_loja4, on='Ano', how='outer')
+
+prod_merged.fillna(0, inplace=True)
+prod_merged.sort_values(by='Ano', inplace=True)
+
+
+# Replace missing values (NaN) with 0
+prod_merged.fillna(0, inplace=True)
+
+#import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(prod_merged['Ano'], prod_merged['Total_Loja1'], marker='o', label='Loja 1')
+plt.plot(prod_merged['Ano'], prod_merged['Total_Loja2'], marker='o', label='Loja 2')
+plt.plot(prod_merged['Ano'], prod_merged['Total_Loja3'], marker='o', label='Loja 3')
+plt.plot(prod_merged['Ano'], prod_merged['Total_Loja4'], marker='o', label='Loja 4')
+
+plt.title('Faturamento Anual (Preço + Frete) por Loja')
+plt.xlabel('Ano')
+plt.ylabel('Total Faturado (R$)')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+-----
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Step 1 — Prepare dates
+loja['Data da Compra'] = pd.to_datetime(loja['Data da Compra'], dayfirst=True)
+loja2['Data da Compra'] = pd.to_datetime(loja2['Data da Compra'], dayfirst=True)
+loja3['Data da Compra'] = pd.to_datetime(loja3['Data da Compra'], dayfirst=True)
+loja4['Data da Compra'] = pd.to_datetime(loja4['Data da Compra'], dayfirst=True)
+
+# Step 2 — Create 'Total' and 'Ano' columns
+for df in [loja, loja2, loja3, loja4]:
+    df['Total'] = df['Preço'] + df['Frete']
+    df['Ano'] = df['Data da Compra'].dt.year
+
+# Step 3 — Group by year for each loja
+def group_loja(df, loja_name):
+    grouped = df.groupby('Ano').agg(
+        Quantidade=('Total', 'count'),
+        Faturamento=('Total', 'sum')
+    ).reset_index()
+    grouped['Loja'] = loja_name
+    return grouped
+
+data_loja1 = group_loja(loja, 'Loja 1')
+data_loja2 = group_loja(loja2, 'Loja 2')
+data_loja3 = group_loja(loja3, 'Loja 3')
+data_loja4 = group_loja(loja4, 'Loja 4')
+
+# Step 4 — Combine all into one DataFrame
+all_data = pd.concat([data_loja1, data_loja2, data_loja3, data_loja4], ignore_index=True)
+
+# Step 5 — Prepare bar chart with grouped bars
+anos = sorted(all_data['Ano'].unique())
+lojas = ['Loja 1', 'Loja 2', 'Loja 3', 'Loja 4']
+x = np.arange(len(anos))  # positions for the years
+
+width = 0.2  # width of each bar
+
+fig, ax1 = plt.subplots(figsize=(14, 7))
+
+bar_colors = ['blue', 'green', 'red', 'purple']
+line_colors = ['blue', 'green', 'red', 'purple']
+
+# Plot bars for each loja
+for i, loja_nome in enumerate(lojas):
+    data = all_data[all_data['Loja'] == loja_nome]
+    quantities = []
+    for ano in anos:
+        q = data.loc[data['Ano'] == ano, 'Quantidade']
+        quantities.append(q.values[0] if not q.empty else 0)
+    bars = ax1.bar(x + i * width, quantities, width, label=f'{loja_nome} - Quantidade', color=bar_colors[i])
+
+    # Add value labels on top of bars
+    for bar in bars:
+        height = bar.get_height()
+        if height > 0:
+            ax1.text(bar.get_x() + bar.get_width()/2, height + 1, int(height), ha='center', va='bottom', fontsize=9, color='black')
+
+ax1.set_xlabel('Ano')
+ax1.set_ylabel('Quantidade de Vendas')
+ax1.set_xticks(x + width * 1.5)  # center the x-ticks
+ax1.set_xticklabels(anos)
+ax1.legend(loc='upper left')
+
+# Step 6 — Plot lines for faturamento
+ax2 = ax1.twinx()
+
+for i, loja_nome in enumerate(lojas):
+    data = all_data[all_data['Loja'] == loja_nome]
+    faturamentos = []
+    for ano in anos:
+        f = data.loc[data['Ano'] == ano, 'Faturamento']
+        faturamentos.append(f.values[0] if not f.empty else 0)
+    line = ax2.plot(x + width * 1.5, faturamentos, marker='o', color=line_colors[i], label=f'{loja_nome} - Faturamento', linewidth=2)
+
+    # Add value labels on line points
+    for xi, yi in zip(x + width * 1.5, faturamentos):
+        if yi > 0:
+            ax2.text(xi, yi + yi * 0.02, f'{yi:,.2f}', ha='center', va='bottom', fontsize=9, color=line_colors[i])
+
+ax2.set_ylabel('Faturamento (R$)')
+
+# Step 7 — Title and layout
+plt.title('Quantidade de Vendas e Faturamento Anual por Loja')
+fig.tight_layout()
+plt.legend(loc='upper right')
+plt.show()
+
+-------------
+
+loja_mais_vendas = resumo.loc[resumo['Total_Vendas'].idxmax(), 'Loja']
+loja_mais_faturamento = resumo.loc[resumo['Total_Faturamento'].idxmax(), 'Loja']
+
+loja_menos_vendas = resumo.loc[resumo['Total_Vendas'].idxmin(), 'Loja']
+loja_menos_faturamento = resumo.loc[resumo['Total_Faturamento'].idxmin(), 'Loja']
+
+print(f'Loja com mais vendas: {loja_mais_vendas}')
+print(f'Loja com maior faturamento: {loja_mais_faturamento}')
+
+print(f'Loja com menos vendas: {loja_menos_vendas}')
+print(f'Loja com menor faturamento: {loja_menos_faturamento}\n')  
+resumo_to_display = resumo.copy()
+
+resumo_to_display['Total_Faturamento'] = resumo_to_display['Total_Faturamento'].apply(
+    lambda x: f'{x:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.') if isinstance(x, (int, float)) else x
+)
+
+print(resumo_to_display)
+
+----
+
+# Step 1: Get the first lat/lon per loja
+first_coords = all_lojas.groupby('Loja')[['lat', 'lon']].first().reset_index()
+
+# Step 2: Define a function to assign the first lat/lon to all rows per loja
+def set_first_coords(df, coords_df):
+    df = df.copy()
+    for _, row in coords_df.iterrows():
+        loja_nome = row['Loja']
+        lat = row['lat']
+        lon = row['lon']
+        df.loc[df['Loja'] == loja_nome, 'lat'] = lat
+        df.loc[df['Loja'] == loja_nome, 'lon'] = lon
+    return df
+
+# Step 3: Apply the function
+all_lojas_fixed = set_first_coords(all_lojas, first_coords)
+
+import folium
+from folium.plugins import HeatMap
+
+# Step 1: Use the fixed coordinates DataFrame
+df = all_lojas_fixed.copy()
+
+# Step 2: Create the base map centered on the average location
+map_center = [df['lat'].mean(), df['lon'].mean()]
+m = folium.Map(location=map_center, zoom_start=6)
+
+# Step 3: Create a HeatMap layer for each loja
+for loja_nome in df['Loja'].unique():
+    loja_data = df[df['Loja'] == loja_nome]
+    heat_data = loja_data[['lat', 'lon']].values.tolist()
+    # Create a FeatureGroup so each loja can be toggled on/off
+    fg = folium.FeatureGroup(name=loja_nome)
+    HeatMap(heat_data, radius=25).add_to(fg)
+    fg.add_to(m)
+
+# Step 4: Add a layer control to switch lojas on/off
+folium.LayerControl().add_to(m)
+
+# Display the map
+m
+---
+
+
+
+loja['Loja'] = 'Loja 1'
+loja2['Loja'] = 'Loja 2'
+loja3['Loja'] = 'Loja 3'
+loja4['Loja'] = 'Loja 4'
+
+# Concatenate all lojas
+all_lojas = pd.concat([loja, loja2, loja3, loja4], ignore_index=True)
+
+# Drop rows without coordinates if any
+all_lojas = all_lojas.dropna(subset=['lat', 'lon'])
+import folium
+from folium.plugins import HeatMap
+
+# Define center of the map — average of all points
+map_center = [all_lojas['lat'].mean(), all_lojas['lon'].mean()]
+
+# Create base map
+m = folium.Map(location=map_center, zoom_start=6)  # You can increase zoom_start if stores are close together
+
+# Option 1: All lojas combined
+heat_data = all_lojas[['lat', 'lon']].values.tolist()
+
+HeatMap(heat_data, radius=15).add_to(m)
+
+from folium.plugins import HeatMapWithTime
+
+m = folium.Map(location=map_center, zoom_start=6)
+
+for loja_nome in all_lojas['Loja'].unique():
+    loja_data = all_lojas[all_lojas['Loja'] == loja_nome]
+    heat = HeatMap(loja_data[['lat', 'lon']].values.tolist(), radius=15, name=loja_nome)
+    folium.FeatureGroup(name=loja_nome).add_child(heat).add_to(m)
+
+folium.LayerControl().add_to(m)
+
+m
+
+
+
+
