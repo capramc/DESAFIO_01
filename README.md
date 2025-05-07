@@ -15,9 +15,17 @@ Os campos abaixo apresenta os dados de 4 lojas fictícias:
 4) Média de avaliação das lojas - valor médio das notas da avaliação pelo usuário agrupados por loja
 5) Produtos mais e menos vendidos - lista em ordem decrescente dos produtos mais vendidos agrupados por loja
 6) Frete médio por loja - valor médio do frete agrupados por loja
-7) Análise com gráficos - faturamento por loja, quantidade de produtos vendidos por loja e quantidade de vendas e faturamento anual por loja
+7) Análise com gráficos - faturamento por loja, quantidade de produtos vendidos por loja, quantidade de vendas e faturamento anual por loja e mapa de calor
 
 ##  Scripts
 Todos os scripts feitos em Python
 
+## Imagens
 
+![Exemplo de barras com linhas](OneDrive/CAPRA/ORACLE_ONE/DESAFIO/img01.png)
+
+![Exemplo de barras](OneDrive/CAPRA/ORACLE_ONE/DESAFIO/img02.png)
+
+![Exemplo de linhas](OneDrive/CAPRA/ORACLE_ONE/DESAFIO/img03.png)
+
+![Exemplo de heatmap](OneDrive/CAPRA/ORACLE_ONE/DESAFIO/img04.png)
